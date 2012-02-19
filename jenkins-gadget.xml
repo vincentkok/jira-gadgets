@@ -21,7 +21,6 @@
 			
 			getDataFromJenkins();
 			setInterval(getDataFromJenkins, 10000);
-			var blinkIntervalId = -1;
 
 		  	function getColor(color) {
 				if (color == 'blue' || color == 'blue_anime') {
@@ -44,10 +43,6 @@
 				return color.indexOf('anime') > -1;
 			}
 
-			function blink() {
-				$(".blink").fadeOut(1000).fadeIn(1000);
-			}
-
 		 	function getDataFromJenkins() { 
 				$("#jobs").empty();
 		
@@ -55,24 +50,17 @@
 			 	 	function(data) {
 						var jobs = [];
 						$.each(data.jobs, function(key, job) {
-							var className = isInProgress(job.color) ? 'blink' : '';
+							var className = isInProgress(job.color) ? 'pulsate' : '';
 
 							jobs.push('<li class="' + className +'" id="' + key + '" style="background-color: ' + getColor(job.color)  + ';border-radius: 10px;">' + job.name + '</li>');
 						});
-
-						if (blinkIntervalId != -1) {
-							clearInterval(blinkIntervalId);
-							blinkIntervalId = -1;
-						}
 
 						$('<ul/>', {
 						   	'id': 'joblist',
 							    html: jobs.join('')
 							  }).appendTo('#jobs');
 
-						blink();
-						blinkIntervalId = setInterval(blink, 2000);
-
+						$(".pulsate").effect("pulsate", { times:5 }, 2000);
 			  	});
 			}
 		</script>
