@@ -6,8 +6,9 @@
      <![CDATA[
 	<html>
 	<head>
-	  <style>img{ height: 100px; float: left; }</style>
-	  <script src="http://code.jquery.com/jquery-latest.js"></script>
+		<style>img{ height: 100px; float: left; }</style>
+		<script src="http://code.jquery.com/jquery.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.8.17/jquery-ui.min.js"></script>
 		<style> 
 			#joblist { list-style-type: none; margin: 0; padding: 0; }
 			#joblist li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 400px; height: 50px; font-size: 20px; color: #ffffff; font-family: Helvetica; text-align: center; }
