@@ -2,16 +2,33 @@
 <Module>
   <ModulePrefs title="Jenkins Gadget" /> 
   <UserPref name="jenkins_url" display_name="Jenkins REST URL" default_value="http://&lt;server&gt;/jenkins/view/&lt;viewname&gt;/api/json?depth=1&amp;jsonp=?"/>
+  <UserPref name="nr_of_columns" display_name="Nr. of columns" default_value="1"/>
   <Content type="html" view="home,default,canvas,wallboard">
      <![CDATA[
 	<html>
 	<head>
-		<style>img{ height: 100px; float: left; }</style>
 		<script src="http://code.jquery.com/jquery.min.js"></script>
 		<script src="http://code.jquery.com/ui/1.8.17/jquery-ui.min.js"></script>
 		<style> 
-			#joblist { list-style-type: none; margin: 0; padding: 0; }
-			#joblist li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 400px; height: 35px; font-size: 20px; color: #ffffff; font-family: Helvetica; text-align: center; }
+			.panelcontainer {
+				width: 	100%;
+				height: 100%;
+			}
+
+			.panelrow {
+				clear: 	both;
+			}
+
+			.panelcell {
+				height: 100%;
+				float:	left;
+				margin: 1px;
+				border-radius:20px;
+				text-align: center;
+				color: #ffffff; 
+				font-family: Helvetica; 
+				text-align: center;			
+			}	
 		</style>
 	</head>
 	<body style="background-color: #000">
@@ -48,18 +65,37 @@
 		
 				$.getJSON(prefs.getString('jenkins_url'),
 			 	 	function(data) {
-						var jobs = [];
+						var nrOfJobs 		= 30;
+						var nrOfColumns 	= prefs.getInt('nr_of_columns');
+						var jobHeight 		= 90 / (nrOfJobs / nrOfColumns);
+						var jobWidth 		= 99 / nrOfColumns;
+						var columnCounter 	= 1;
+						var jobs 			= [];
 						$.each(data.jobs, function(key, job) {
 							var className = isInProgress(job.color) ? 'pulsate' : '';
 
-							jobs.push('<li class="' + className +'" id="' + key + '" style="background-color: ' + getColor(job.color)  + ';border-radius: 10px;">' + job.name + '</li>');
-						});
+							if (columnCounter == 1) {
+								jobs.push('<div class="panelrow" style="height:' + jobHeight + '%;">');
+							}
 
-						$('<ul/>', {
-						   	'id': 'joblist',
-							    html: jobs.join('')
-							  }).appendTo('#jobs');
+							jobs.push('<div class="panelcell ' 
+										+ className +'" id="' + key 
+										+ '" style="background-color: ' 
+										+ getColor(job.color)  
+										+ ';border-radius: 10px;width:' 
+										+ jobWidth + '%;' 
+										+ 'font-size: ' + jobHeight * 5 + 'px;">' 
+										+ job.name + '</div>');
 
+							if (columnCounter == nrOfColumns) {
+								jobs.push('</div>')
+								columnCounter = 1;
+							} else {
+								columnCounter++					
+							}
+						}
+
+						$('#jobs').prepend(jobs.join(''));
 						$(".pulsate").effect("pulsate", { times:5 }, 2000);
 			  	});
 			}
