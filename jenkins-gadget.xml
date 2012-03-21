@@ -93,7 +93,7 @@
 							} else {
 								columnCounter++					
 							}
-						}
+						});
 
 						$('#jobs').prepend(jobs.join(''));
 						$(".pulsate").effect("pulsate", { times:5 }, 2000);
