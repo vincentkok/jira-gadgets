@@ -65,7 +65,7 @@
 		
 				$.getJSON(prefs.getString('jenkins_url'),
 			 	 	function(data) {
-						var nrOfJobs 		= 30;
+						var nrOfJobs 		= data.jobs.length;
 						var nrOfColumns 	= prefs.getInt('nr_of_columns');
 						var jobHeight 		= 90 / (nrOfJobs / nrOfColumns);
 						var jobWidth 		= 99 / nrOfColumns;
