@@ -77,6 +77,8 @@
 							if (columnCounter == 1) {
 								jobs.push('<div class="panelrow" style="height:' + jobHeight + '%;">');
 							}
+							
+							var jobFontSize = ($(document).height() / 120) * jobHeight;
 
 							jobs.push('<div class="panelcell ' 
 										+ className +'" id="' + key 
@@ -84,7 +86,7 @@
 										+ getColor(job.color)  
 										+ ';border-radius: 10px;width:' 
 										+ jobWidth + '%;' 
-										+ 'font-size: ' + jobHeight * 5 + 'px;">' 
+										+ 'font-size: ' + jobFontSize + 'px;">' 
 										+ job.name + '</div>');
 
 							if (columnCounter == nrOfColumns) {
