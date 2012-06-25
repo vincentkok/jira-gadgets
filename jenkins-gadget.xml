@@ -7,8 +7,8 @@
      <![CDATA[
 	<html>
 	<head>
-		<script src="http://code.jquery.com/jquery.min.js"></script>
-		<script src="http://code.jquery.com/ui/1.8.17/jquery-ui.min.js"></script>
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery-ui.min.js"></script>
 		<style> 
 			.panelcontainer {
 				width: 	100%;
