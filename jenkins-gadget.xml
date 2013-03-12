@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <Module>
   <ModulePrefs title="Jenkins Gadget" /> 
-  <UserPref name="jenkins_url" display_name="Jenkins REST URL" default_value="http://&lt;server&gt;/jenkins/view/&lt;viewname&gt;/api/json?depth=1&amp;jsonp=?"/>
+  <UserPref name="jenkins_url" display_name="Jenkins REST URL" default_value="http://&lt;server&gt;/jenkins/view/&lt;viewname&gt;/api/json?depth=1"/>
   <UserPref name="nr_of_columns" display_name="Nr. of columns" default_value="1"/>
   <Content type="html" view="home,default,canvas,wallboard">
      <![CDATA[
