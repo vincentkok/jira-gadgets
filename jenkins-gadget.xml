@@ -63,7 +63,7 @@
 		 	function getDataFromJenkins() { 
 				$("#jobs").empty();
 		
-				$.getJSON(prefs.getString('jenkins_url'),
+				$.get(prefs.getString('jenkins_url'),
 			 	 	function(data) {
 						var nrOfJobs 		= data.jobs.length;
 						var nrOfColumns 	= prefs.getInt('nr_of_columns');
