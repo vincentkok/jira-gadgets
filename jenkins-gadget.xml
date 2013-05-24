@@ -17,8 +17,9 @@
             #jobs {
                 width:  100%;
                 height: 100%;
+                overflow: hidden;
             }
-            .panelcell {
+            body > div > div {
                 height: 100%;
                 float: left;
                 margin: 1px;
@@ -26,7 +27,6 @@
                 text-align: center;
                 color: #ffffff; 
                 font-family: Helvetica; 
-                text-align: center;        
                 background-color: #990000;                
             }
             .blue {
@@ -45,26 +45,22 @@
         <script>
             var prefs = new gadgets.Prefs();
             refreshJobs();
-            setInterval(refreshJobs, 10000);
-            var nextTime;
-            
+            setInterval(refreshJobs, 10000);         
             var prefixesToRemoveString = prefs.getString('prefixesToRemove');
+            var nrOfColumns = prefs.getInt('nr_of_columns');
             
             var prefixesToRemove = !prefixesToRemoveString ? [] : prefixesToRemoveString.split(',').sort(function(a, b) {
                 return a.length < b.length;
             });
 
             function refreshJobs() {
-                nextTime = new Date().getTime() + 10000;
+                var nextTime = new Date().getTime() + 10000;
                 $.get(prefs.getString('jenkins_url'),
                       function(data) {
                         shortenNames(data.jobs);
-                        data.jobs.sort(function(first, second) {
-                            return first.name.localeCompare(second.name);
-                        });
                         var jobs = $.map(data.jobs, toElement);
                         $('#jobs').html(jobs.join(''));
-                        divideOverColumns($('#jobs .panelcell'));
+                        divideOverColumns($('#jobs > div'));
                         $(".anime").effect({
                             effect: "pulsate",
                             times: 4.5,
@@ -82,12 +78,15 @@
                         }
                     }
                 }
-                return '<div class="panelcell ' + job.color.replace('_', ' ') + '">' + title + '</div>';
+                return '<div class="' + job.color.replace('_', ' ') + '">' + title + '</div>';
             }
             function shortenNames(jobs) {
                 for (var i = 0; i < jobs.length; i++) {
                     jobs[i].name = shortenName(jobs[i].name);
                 }
+                jobs.sort(function(first, second) {
+                    return first.name.localeCompare(second.name);
+                });
             }
             function shortenName(name) {
                 for (var i = 0; i< prefixesToRemove.length; i++) {
@@ -99,12 +98,10 @@
                 return name;
             }
             function divideOverColumns(items) {
-                var nrOfColumns = prefs.getInt('nr_of_columns');
-                var jobHeight   = 90 / Math.ceil(items.length / nrOfColumns);
-                var jobWidth    = 99 / nrOfColumns;
+                var jobHeight   = Math.min(95 / Math.ceil(items.length / nrOfColumns), 10);
                 var jobFontSize = $('#jobs').height() * jobHeight / 120;
                 items.css({
-                    width: jobWidth + '%',
+                    width: 99 / nrOfColumns + '%',
                     height: jobHeight + "%",
                     "font-size": jobFontSize + "px"
                 });
