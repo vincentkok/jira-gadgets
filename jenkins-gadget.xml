@@ -45,12 +45,10 @@
             var prefs = new gadgets.Prefs();
             refreshJobs();
             setInterval(refreshJobs, 10000);
+            var nextTime;
 
-            function isInProgress(color) {
-                return color.indexOf('anime') > -1;
-            }
-
-             function refreshJobs() {        
+            function refreshJobs() {
+                nextTime = new Date().getTime() + 10000;
                 $.get(prefs.getString('jenkins_url'),
                       function(data) {
                         var jobs = $.map(data.jobs, toElement);
@@ -58,8 +56,8 @@
                         divideOverColumns($('#jobs .panelcell'));
                         $(".anime").effect({
                             effect: "pulsate",
-                            times: 5,
-                            duration: 10000
+                            times: 4.5,
+                            duration: nextTime - new Date().getTime()
                         });
                   });
             }
