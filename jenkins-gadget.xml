@@ -17,9 +17,6 @@
                 width:  100%;
                 height: 100%;
             }
-            .panelrow {
-                clear: both;
-            }
             .panelcell {
                 height: 100%;
                 float: left;
@@ -75,28 +72,16 @@
                             title += " [" + result[1] + "/" + result[2] + "]";
                         }
                     }
-                }
-                
-                return '<div class="panelcell ' 
-                                        + job.color.replace('_', ' ') 
-                                        + '">' 
-                                        + title + '</div>';
+                }    
+                return '<div class="panelcell ' + job.color.replace('_', ' ')  + '">' + title + '</div>';
             }
             function divideOverColumns(items) {
                 var nrOfColumns = prefs.getInt('nr_of_columns');
-                var jobHeight   = Math.min(90 / Math.ceil(items.length / nrOfColumns), 10);
+                var jobHeight   = 90 / Math.ceil(items.length / nrOfColumns);
                 var jobWidth    = 99 / nrOfColumns;
                 var jobFontSize = $('#jobs').height() * jobHeight / 120;
-                var start       = 0;
-                for (var i = 0; i < nrOfColumns; i++) {
-                    var end = Math.ceil((i + 1) * items.length/nrOfColumns);
-                    items.slice(start, end).wrapAll('<div class="panelrow">');
-                    start = end;
-                }
                 items.css({
-                    width: jobWidth + '%'
-                });
-                $('#jobs .panelrow').css({
+                    width: jobWidth + '%',
                     height: jobHeight + "%",
                     "font-size": jobFontSize + "px"
                 });
