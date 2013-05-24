@@ -3,6 +3,7 @@
   <ModulePrefs title="Jenkins Gadget" /> 
   <UserPref name="jenkins_url" display_name="Jenkins REST URL" default_value="http://&lt;server&gt;/jenkins/view/&lt;viewname&gt;/api/json?depth=1"/>
   <UserPref name="nr_of_columns" display_name="Nr. of columns" default_value="1"/>
+  <UserPref name="prefixesToRemove" display_name="Prefixes to remove (comma separated)" default_value=""/>
   <Content type="html" view="home,default,canvas,wallboard">
     <![CDATA[
     <html>
@@ -46,11 +47,21 @@
             refreshJobs();
             setInterval(refreshJobs, 10000);
             var nextTime;
+            
+            var prefixesToRemoveString = prefs.getString('prefixesToRemove');
+            
+            var prefixesToRemove = !prefixesToRemoveString ? [] : prefixesToRemoveString.split(',').sort(function(a, b) {
+                return a.length < b.length;
+            });
 
             function refreshJobs() {
                 nextTime = new Date().getTime() + 10000;
                 $.get(prefs.getString('jenkins_url'),
                       function(data) {
+                        shortenNames(data.jobs);
+                        data.jobs.sort(function(first, second) {
+                            return first.name.localeCompare(second.name);
+                        });
                         var jobs = $.map(data.jobs, toElement);
                         $('#jobs').html(jobs.join(''));
                         divideOverColumns($('#jobs .panelcell'));
@@ -62,7 +73,7 @@
                   });
             }
             function toElement(job) {
-                var title = job.name;
+                var title = job.name;                
                 if (job.healthReport) {
                     for (var i = 0; i < job.healthReport.length; i++) {
                         var result = /Test Result: (\d+) tests failing out of a total of ([\d,]+) tests./.exec(job.healthReport[i].description);
@@ -70,8 +81,22 @@
                             title += " [" + result[1] + "/" + result[2] + "]";
                         }
                     }
-                }    
-                return '<div class="panelcell ' + job.color.replace('_', ' ')  + '">' + title + '</div>';
+                }
+                return '<div class="panelcell ' + job.color.replace('_', ' ') + '">' + title + '</div>';
+            }
+            function shortenNames(jobs) {
+                for (var i = 0; i < jobs.length; i++) {
+                    jobs[i].name = shortenName(jobs[i].name);
+                }
+            }
+            function shortenName(name) {
+                for (var i = 0; i< prefixesToRemove.length; i++) {
+                    var length = prefixesToRemove[i].length;
+                    if (name.substring(0, length) === prefixesToRemove[i]) {
+                        return name.substring(length);
+                    }
+                }
+                return name;
             }
             function divideOverColumns(items) {
                 var nrOfColumns = prefs.getInt('nr_of_columns');
