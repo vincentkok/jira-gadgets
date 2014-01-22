@@ -41,7 +41,7 @@
         </style>
     </head>
     <body>
-        <div id="jobs"/>
+        <div id="jobs"></div>
         <script>
             var prefs = new gadgets.Prefs();
             refreshJobs();
