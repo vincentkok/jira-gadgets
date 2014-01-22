@@ -61,7 +61,7 @@
                         var jobs = $.map(data.jobs, toElement);
                         $('#jobs').html(jobs.join(''));
                         divideOverColumns($('#jobs > div'));
-                        $(".anime").effect({
+                        $(".anime > span").effect({
                             effect: "pulsate",
                             times: 4.5,
                             duration: nextTime - new Date().getTime()
@@ -78,7 +78,7 @@
                         }
                     }
                 }
-                return '<div class="' + job.color.replace('_', ' ') + '">' + title + '</div>';
+                return '<div class="' + job.color.replace('_', ' ') + '"><span>' + title + '</span></div>';
             }
             function shortenNames(jobs) {
                 for (var i = 0; i < jobs.length; i++) {
