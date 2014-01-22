@@ -4,6 +4,10 @@
   <UserPref name="jenkins_url" display_name="Jenkins REST URL" default_value="http://&lt;server&gt;/jenkins/view/&lt;viewname&gt;/api/json?depth=1"/>
   <UserPref name="nr_of_columns" display_name="Nr. of columns" default_value="1"/>
   <UserPref name="prefixesToRemove" display_name="Prefixes to remove (comma separated)" default_value=""/>
+  <UserPref name="effectType" display_name="Effect type" datatype="enum" default_value="">
+    <EnumValue value="" display_value="Pulsating background"/>
+    <EnumValue value=" > span" display_value="Pulsating text"/>
+  </UserPref>
   <Content type="html" view="home,default,canvas,wallboard">
     <![CDATA[
     <html>
@@ -48,6 +52,7 @@
             setInterval(refreshJobs, 10000);         
             var prefixesToRemoveString = prefs.getString('prefixesToRemove');
             var nrOfColumns = prefs.getInt('nr_of_columns');
+            var effectTypeSelector = prefs.getString('effectType');
             
             var prefixesToRemove = !prefixesToRemoveString ? [] : prefixesToRemoveString.split(',').sort(function(a, b) {
                 return a.length < b.length;
@@ -61,7 +66,7 @@
                         var jobs = $.map(data.jobs, toElement);
                         $('#jobs').html(jobs.join(''));
                         divideOverColumns($('#jobs > div'));
-                        $(".anime > span").effect({
+                        $(".anime" + effectTypeSelector).effect({
                             effect: "pulsate",
                             times: 4.5,
                             duration: nextTime - new Date().getTime()
